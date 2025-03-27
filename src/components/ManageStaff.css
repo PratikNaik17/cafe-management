@@ -1,0 +1,107 @@
+.manage-staff {
+    /* margin-top: 20px; */
+    padding: 20px;
+  }
+
+
+.heading{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+    .homebtn{
+        margin-top: 10px;
+        background-color: #ddd;
+        color: black;
+        border: none;
+        padding: 10px 20px;  cursor: pointer;
+        margin-right: 8px;
+        border-radius: 5px; 
+        text-decoration: none;
+    }
+
+    .home:hover {
+        background-color: #f9f9f9f9;
+        box-shadow: inset 0 0 0 1px #000000;
+        color: #000000; 
+    }
+
+  .h1{
+    text-align: center;
+  }
+
+  .add{
+    margin-top: 20px;
+    background-color: #ddd;
+    color: black;
+    border: none;
+    padding: 14px 24px;  cursor: pointer;
+    margin-right: 8px;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  
+  .manage-staff button {
+    margin-bottom: 20px;
+  }
+
+  .add:hover {
+    background-color: #f9f9f9f9;
+    box-shadow: inset 0 0 0 1px #000000;
+    color: #000000; 
+  }
+  
+  
+ 
+  
+  .staff-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .staff-card {
+    display: flex;
+    background-color: #f9f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .staff-info {
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  .staff-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .staff-actions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .staff-actions button:hover {
+    background-color: #ddd;
+  }
+  
+  .staff-actions button.remove {
+    background-color: #ff6347;
+    color: white;
+  }
+  
+  .staff-actions button.remove:hover {
+    background-color: #ff4500;
+  }
+  
+  .form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
