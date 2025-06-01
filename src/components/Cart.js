@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from '../CartContext';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 
 const Cart = () => {
-  const { cart, incrementQuantity, decrementQuantity, checkout } = useCart();
+  const { cart, incrementQuantity, decrementQuantity, checkout, saveCart, removeFromCart } = useCart();
   const navigate = useNavigate();
 
-  const handleCheckout = () => {
-    checkout();
-    navigate('/orders');
+  useEffect(() => {
+    if (cart.length > 0) {
+      saveCart();
+    }
+  }, [cart]);
+
+  const handleCheckout = async () => {
+    try {
+      await checkout();
+      navigate('/orders');
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Failed to complete checkout');
+    }
   };
 
   const subtotal = () => {
@@ -45,16 +56,28 @@ const Cart = () => {
                 <span className="quantity-value">{item.quantity}</span>
                 <button onClick={() => incrementQuantity(index)}>+</button>
               </div>
+              <button 
+                className="remove-button"
+                onClick={() => removeFromCart(index)}
+              >
+                Remove
+              </button>
             </div>
           </div>
         ))}
       </div>
       <div className="cart-summary">
         <p>Sub Total: &pound;{subtotal()}</p>
-        <p>Delivery Fee: &pound;6.9</p>
-        <p>Total: &pound;{total()}</p>
+        {cart.length > 0 && <p>Delivery Fee: &pound;6.9</p>}
+        {cart.length > 0 && <p>Total: &pound;{total()}</p>}
       </div>
-      <button onClick={handleCheckout} className="checkout-button">Order</button>
+      <button 
+        onClick={handleCheckout} 
+        className="checkout-button"
+        disabled={cart.length === 0}
+      >
+        Order
+      </button>    
     </div>
   );
 };

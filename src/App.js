@@ -10,6 +10,7 @@ import ManageStaff from './components/ManageStaff';
 import { StaffProvider } from './components/StaffContext'; 
 import './App.css';
 import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           <div className="App">
             <Routes>
             <Route path="/" element={<LoginPage />} />
-
+              <Route path="/register" element={<RegisterPage />} />
               <Route path="/home" element={<Home />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/orders" element={<Orders />} />

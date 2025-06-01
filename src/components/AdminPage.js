@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './AdminPage.css';
 
 const AdminPage = () => {
-//   const { cart, setCart } = useCart();
+  // const { cart, setCart } = useCart();
   const [foodItems, setFoodItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
@@ -15,22 +15,7 @@ const AdminPage = () => {
     ratings: ''
   });
 
- 
-  const fetchFoodItems = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/api/food-items');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      setFoodItems(data);
-    } catch (error) {
-      console.error('Error fetching food items:', error);
-    }
-  };
-
-  
-  const handleAddItem = () => {
+    const handleAddItem = () => {
     setFormData({
       name: '',
       imageURL: '',
@@ -41,7 +26,6 @@ const AdminPage = () => {
     setItemToEdit(null);
   };
 
- 
   const handleEditItem = (item) => {
     setFormData({
       name: item.name,
@@ -52,20 +36,41 @@ const AdminPage = () => {
     setIsModalOpen(true);
     setItemToEdit(item.id);
   };
-
  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newItem = {
-      ...formData,
-      id: itemToEdit !== null ? itemToEdit : foodItems.length + 1
-    };
+const fetchFoodItems = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://localhost:3001/api/food-items', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    setFoodItems(data);
+  } catch (error) {
+    console.error('Error fetching food items:', error);
+  }
+};
 
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem('token');
+  const newItem = {
+    ...formData,
+    price: parseFloat(formData.price),
+    ratings: parseFloat(formData.ratings)
+  };
+
+  try {
     if (itemToEdit) {
       await fetch(`http://localhost:3001/api/food-items/${itemToEdit}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(newItem)
       });
@@ -73,24 +78,33 @@ const AdminPage = () => {
       await fetch('http://localhost:3001/api/food-items', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(newItem)
       });
     }
-
     setIsModalOpen(false);
     fetchFoodItems();
-  };
+  } catch (error) {
+    console.error('Error submitting item:', error);
+  }
+};
 
-
-  const handleDeleteItem = async (itemId) => {
+const handleDeleteItem = async (itemId) => {
+  const token = localStorage.getItem('token');
+  try {
     await fetch(`http://localhost:3001/api/food-items/${itemId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     setFoodItems(foodItems.filter(item => item.id !== itemId));
-  };
-
+  } catch (error) {
+    console.error('Error deleting item:', error);
+  }
+};
 
   useEffect(() => {
     fetchFoodItems();

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStaff } from './StaffContext'; 
 import './LoginPage.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { staffCredentials } = useStaff(); 
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,29 +18,45 @@ const LoginPage = () => {
     }));
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const { email, password } = formData;
 
-    const ADMIN_EMAIL = 'admin@gmail.com';
-    const ADMIN_PASSWORD = '1234';
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      navigate('/admin');
-    } else {
-     
-      const staff = staffCredentials.find(s => s.email === email && s.password === password);
-      if (staff) {
+    try {
+      const response = await fetch('http://localhost:3001/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // Redirect based on role
+      if (data.user.role === 'admin') {
+        navigate('/admin');
+      } else if (data.user.role === 'staff') {
         navigate('/staff-orders');
       } else {
-        
         navigate('/home');
       }
+    } catch (error) {
+      setError('Invalid email or password');
+      console.error('Login error:', error);
     }
   };
 
   return (
     <div className="login-box">
       <h2>Log In</h2>
+      {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleLogin}>
         <input
           type="email"
@@ -61,6 +76,7 @@ const LoginPage = () => {
         />
         <button type="submit">Log in</button>
       </form>
+      <p>Don't have an account? <button onClick={() => navigate('/register')}>Register</button></p>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
-  const { cart, setCart } = useCart();
+  const { cart, addToCart  } = useCart();
   const [foodItems, setFoodItems] = useState([]);
 
 
@@ -22,9 +22,9 @@ const Home = () => {
   };
 
 
-  const addToCart = (item) => {
-    setCart([...cart, { ...item, quantity: 1 }]);
-  };
+  // const addToCart = (item) => {
+  //   setCart([...cart, { ...item, quantity: 1 }]);
+  // };
 
 
   useEffect(() => {

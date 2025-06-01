@@ -6,12 +6,13 @@
 
 .heading{
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
   }
 
     .homebtn{
         margin-top: 10px;
+        margin-right: 800px;
         background-color: #ddd;
         color: black;
         border: none;
